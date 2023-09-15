@@ -19,6 +19,22 @@ def create_mandel() -> np.array:
     #a[0] = 0
     #a[n] = a[n-1]**2 + complex(x,y)
     #if |a[n]| > 2 is n the diverging index. if n not between 0 en 100 -> 0
-    c = complex([-1.5, 0.5], [-1, 1])
+    
+def pixelToC(width : int) -> np.array:
+    """Turns pixels into a complex number
+    
+    :param width: amount of pixels
+    :return:
+        numpy array: all the complex numbers in the pixel grid 
+    """
+    c = []
+    height = width
+    for x in range(width):
+        for y in range(height):
+            c.append(complex(x,y))
 
-create_mandel()
+    c = np.array(c)
+
+    return c
+
+c = pixelToC(200)
