@@ -1,58 +1,50 @@
-import numpy as np
-from PIL import Image as im
-from matplotlib import pyplot as plt
+from PIL import Image, ImageDraw
 
 def draw_mandel(width : int):
     """Draws mandel
     
     :param width: determs the width and height of the picture
     """
-    #width = height
-    #x range [-1.5; 0.5]
-    #y range [-1; 1]
-    #diverging index (n) determs the pixel colour. Black if n = 0. Otherwise some white or blue
-    c = pixelToC(width)
-    a = create_mandel(c)
-    
-    
+    im = Image.new('RGB', (width, width), (0, 0, 0))
+    draw = ImageDraw.Draw(im)
 
+    for x in range(0, width):
+        for y in range(0, width):
+            c = pixelToC(x, width, y)
+            a = create_mandel(c)
+            
+            color = 255 - int(a * 255 / 80)
 
-def create_mandel(c : np.array) -> np.array:
-    """Creates the mandel points
+            draw.point([x, y], (color, color, color))
+
+    im.save('output.png', 'PNG')
+
+def create_mandel(c: complex) -> int:
+    """Creates the mandel point
     
+    :param c: the complex number added to z
     :return:
-        numpy array: contains all points of the mandel
+        n: number of iters for z to get to 2
     """
-    #a[0] = 0
-    #a[n] = a[n-1]**2 + c
-    #if |a[n]| > 2 is n the diverging index. if n not between 0 en 100 -> 0
-    a = [0]
-    index = 1
-    for i in c:
-        uitkomst = a[index-1]**2 + i
-        if abs(uitkomst) > 2:
-            a.append(uitkomst)
-        else:
-            a.append(0)
+    MAX_ITER = 80
 
-    a = np.array(a)
-    return a
+    z = 0
+    n = 0
+    while abs(z) <= 2 and n < MAX_ITER:
+        z = z*z + c
+        n += 1
+    return n
 
-def pixelToC(width : int) -> np.array:
-    """Turns pixels into a complex number
+def pixelToC(x: int, width : int, y: int) -> complex:
+    """Turns pixel into a complex number
     
+    :param x: x coordinate
     :param width: amount of pixels
+    :param y: y coordinate
     :return:
-        numpy array: all the complex numbers in the pixel grid 
+        c: the complex number of the pixel
     """
-    c = []
-    height = width
-    for x in range(width):
-        for y in range(height):
-            c.append(complex(x,y))
-
-    c = np.array(c)
-
+    c = complex(-1.5 + (x / width) * (0.5 + 1.5), -1 + (y / width) * (1 + 1))
     return c
 
 draw_mandel(200)
