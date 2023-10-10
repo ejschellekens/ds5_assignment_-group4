@@ -18,16 +18,17 @@ df['datum'] = df['arrival_date_year'].astype(str) + ' ' + df['arrival_date_month
 df['date_in_datatime'] = pd.to_datetime(df['datum'], format='%Y %B %d')
 df['arrival_date'] = df['date_in_datatime'].dt.strftime('%d-%m-%Y')
 
+# Rijen met verkeerde gegevens weghalen
+df = df[(df['country'] != 2) & (df['country'] != 3)]
+
+# Mensen die niet niet komen hebben geen data in arrival_date
 for index, row in df.iterrows():
     reservation = row['reservation_status']
     arrival = row['arrival_date']
-    country = row['country']
-    # Mensen die niet niet komen hebben geen data in arrival_date
+    
     if reservation == 'Canceled' or reservation == 'No-Show':
         df.at[index, 'arrival_date'] = None
-    # Rijen met verkeerde gegevens weghalen    
-    if country == 2 or country ==3:
-        df.at[index, 'country'] = None
+
 
 # kolommen weghalen die overbodig zijn
 # Kolommen 'is_repeated_guest','previous_cancellations','previous_bookings_not_canceled',  
