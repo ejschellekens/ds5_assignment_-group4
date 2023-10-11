@@ -31,13 +31,10 @@ for index, row in df.iterrows():
 
 
 # kolommen weghalen die overbodig zijn
-# Kolommen 'is_repeated_guest','previous_cancellations','previous_bookings_not_canceled',  
-# 'days_in_waiting_list' en 'deposit_type' hebben alleen nullen of No Deposit, het is niet nodig om die data te analyseren.
 df.drop(['is_canceled','arrival_date_year','arrival_date_month',
          'arrival_date_week_number','arrival_date_day_of_month',
          'stays_in_weekend_nights', 'stays_in_week_nights','adults',
-         'children','babies','is_repeated_guest','previous_cancellations',
-         'previous_bookings_not_canceled','deposit_type','days_in_waiting_list','datum',
+         'children','babies','datum',
         'date_in_datatime'], axis=1, inplace=True)
 
 # Index op goede volgorde zetten
